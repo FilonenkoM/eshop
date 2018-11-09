@@ -1,0 +1,19 @@
+{
+  "name": "e-shop",
+  "version": "1.0.0",
+  "description": "e-shop by michael filonenko",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+"build": "webpack"
+  },
+  "keywords": [
+    "e-shop"
+  ],
+  "author": "Michael Filonenko",
+  "license": "ISC",
+  "devDependencies": {
+    "webpack": "^4.25.1",
+    "webpack-cli": "^3.1.2"
+  }
+}
