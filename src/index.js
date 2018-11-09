@@ -1,1 +1,1 @@
-alert("Hello");
+alert(`The time is ${new Date()}`);
