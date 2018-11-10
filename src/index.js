@@ -29,7 +29,9 @@ function createCategoryTemplate() {
     var template = document.createElement("li");
     return template;
 }
-
+function message() {
+    alert("hello");
+}
 var categoryTemplate = createCategoryTemplate();
 
 function createProductTemplate() {
@@ -41,16 +43,22 @@ var productTemplate = createProductTemplate();
 function insertCategories(categories) {
     for (let i = 0; i < categories.length; i++) {
         const view = categoryTemplate.cloneNode();
-        view.innerHTML = categories[i].name;
+        view.onclick = function() {
+            const id = categories[i].id;
+            load(SERVER_NAME, "api/product/list/category/" + id, insertProducts);
+        }
+        view.innerHTML = "<a href='#'>" + categories[i].name + "</a>";
         document.getElementById("categories").appendChild(view);
     }
 }
 
 function insertProducts(products) {
+    let container = document.getElementById("products");
+    container.innerHTML = "";
     for (let i = 0; i < products.length; i++) {
         const view = productTemplate.cloneNode();
         view.innerHTML = products[i].name;
-        document.getElementById("products").appendChild(view);
+        container.appendChild(view);
     }
 }
 
