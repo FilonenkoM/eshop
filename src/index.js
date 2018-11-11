@@ -21,7 +21,7 @@ function load(server, method, onLoad) {
             onLoad(JSON.parse(this.responseText));
         }
     }
-    xhr.open("GET", server + method, false);
+    xhr.open("GET", server + method, true);
     xhr.send();
 }
 
@@ -57,14 +57,30 @@ function insertProducts(products) {
     container.innerHTML = "";
     for (let i = 0; i < products.length; i++) {
         const view = productTemplate.cloneNode();
-        view.innerHTML = products[i].name;
+        view.onclick = function() {
+            showProductView(products[i]);
+        }
+        view.innerHTML = "<a href='#'>" +  products[i].name + "</a>";
         container.appendChild(view);
     }
 }
-
+function showProductView(product) {
+    document.getElementById("list-view").style.display = "none";
+    const view = document.getElementById("product-view");
+    view.style.display = "block";
+    document.getElementById("product-view-name").innerHTML = product.name;
+}
+function showListView() {
+    document.getElementById("product-view").style.display = "none";
+    document.getElementById("list-view").style.display = "block";
+}
+function setupProductView() {
+    document.getElementById("back-button").onclick = showListView;
+}
 window.onload = function () {
     load(SERVER_NAME, "api/category/list", insertCategories);
     load(SERVER_NAME, "api/product/list", insertProducts);
+    setupProductView();
 }
 
 
