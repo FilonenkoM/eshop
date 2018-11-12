@@ -11,8 +11,24 @@
 </header>
 <main>
   <div id="list-view">
-    <ul id="categories" class="categories"> </ul>
-    <ul id="products" class="products"> </ul>
+    <ul id="categories" class="categories">
+      <template id="category-template">
+        <li>
+          <a id="category-name-link" href="#">
+            New category
+          </a>
+        </li>
+      </template>
+    </ul>
+    <ul id="products" class="products">
+      <template id="product-template">
+        <li>
+          <a id="product-name-link" href="#">
+            New product
+          </a>
+        </li>
+      </template>
+    </ul>
   </div>
   <div id="product-view">
     <a id="back-button" href="#">Back</a>
