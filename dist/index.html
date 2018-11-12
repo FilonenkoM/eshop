@@ -26,6 +26,12 @@
           <a id="product-name-link" href="#">
             New product
           </a>
+          <img id="product-image">
+          <p id="product-price"> Price
+          </p>
+          <p id="product-special-price">Special-price
+          </p>
+          <button id="add-to-cart" type="button">У кошик</button>
         </li>
       </template>
     </ul>
@@ -33,8 +39,41 @@
   <div id="product-view">
     <a id="back-button" href="#">Back</a>
     <p id="product-view-name">
-
     </p>
+    <img id="product-view-image">
+    <p id="product-view-price">Price</p>
+    <p id="product-view-special-price">Speical price</p>
+    <p id="product-view-description">Description</p>
+    <button type="button" id="to-cart-button">
+      Add to cart
+    </button>
+  </div>
+  <div id="cart-view"
+    <p class="cart-view-header">Кошик</p>
+    <table id="cart-view-table">
+      <tr>
+        <th>Товар</th>
+        <th>Ціна</th>
+        <th>Кількість</th>
+        <th>Видалити</th>
+      </tr>
+      <template id="cart-view-product-template">
+        <tr>
+          <td id="cart-view-product-name"></td>
+          <td id="cart-view-product-price"></td>
+          <td id="cart-view-product-count"></td>
+        </tr>
+      </template>
+    </table>
+    <form>
+      <label>ФІБ</label>
+      <input type="text">
+      <label>Телефон</label>
+      <input type="number">
+      <label>E-mail</label>
+      <input type="email">
+    </form>
+    <button type="button">Надіслати замовлення</button>
   </div>
 </main>
 <footer class="footer">
