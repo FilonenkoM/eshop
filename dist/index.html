@@ -1,76 +1,82 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="utf-8">
-  <title>title</title>
-  <link rel="stylesheet" href="./css/main.css">
+    <meta charset="utf-8">
+    <title>title</title>
+    <link rel="stylesheet" href="./css/main.css">
 </head>
 <body class="main-container">
 <header>
-  <h1>Інтернет-магазин</h1>
+    <div id="categories-icon" class="menu-icon">
+
+    </div>
+    <div id="cart-icon" class="menu-icon">
+
+    </div>
+    <h1 id="store-header">$tore</h1>
+    <div id="list-view">
+        <ul id="categories" class="categories">
+            <template id="category-template">
+                <li>
+                    <a id="category-name-link" href="#">
+                        New category
+                    </a>
+                </li>
+            </template>
+        </ul>
+    </div>
 </header>
 <main>
-  <div id="list-view">
-    <ul id="categories" class="categories">
-      <template id="category-template">
-        <li>
-          <a id="category-name-link" href="#">
-            New category
-          </a>
-        </li>
-      </template>
-    </ul>
     <ul id="products" class="products">
-      <template id="product-template">
-        <li>
-          <a id="product-name-link" href="#">
-            New product
-          </a>
-          <img id="product-image">
-          <p id="product-price"> Price
-          </p>
-          <p id="product-special-price">Special-price
-          </p>
-          <button id="add-to-cart" type="button">У кошик</button>
-        </li>
-      </template>
+        <template id="product-template">
+            <li id="product-container">
+                <img id="product-image">
+                <a id="product-name-link" href="#">
+                    New product
+                </a>
+                <p id="product-price"> Price
+                </p>
+                <p id="product-special-price">Special-price
+                </p>
+                <button id="add-to-cart" type="button">У кошик</button>
+            </li>
+        </template>
     </ul>
-  </div>
-  <div id="product-view">
-    <a id="back-button" href="#">Back</a>
-    <p id="product-view-name">
-    </p>
-    <img id="product-view-image">
-    <p id="product-view-price">Price</p>
-    <p id="product-view-special-price">Speical price</p>
-    <p id="product-view-description">Description</p>
-    <button type="button" id="to-cart-button">
-      Add to cart
-    </button>
-  </div>
-  <div id="cart-view"
+    <div id="product-view">
+        <a id="back-button" href="#">Back</a>
+        <p id="product-view-name">
+        </p>
+        <img id="product-view-image">
+        <p id="product-view-price">Price</p>
+        <p id="product-view-special-price">Speical price</p>
+        <p id="product-view-description">Description</p>
+        <button type="button" id="to-cart-button">
+            Add to cart
+        </button>
+    </div>
+    <div id="cart-view"
     <p class="cart-view-header">Кошик</p>
     <table id="cart-view-table">
-      <tr>
-        <th>Товар</th>
-        <th>Ціна</th>
-        <th>Кількість</th>
-        <th>Видалити</th>
-      </tr>
+        <tr>
+            <th>Товар</th>
+            <th>Ціна</th>
+            <th>Кількість</th>
+            <th>Видалити</th>
+        </tr>
     </table>
-    <form>
-      <label>ФІБ</label>
-      <input id="cart-view-name" type="text">
-      <label>Телефон</label>
-      <input  id="cart-view-phone" type="number">
-      <label>E-mail</label>
-      <input  id="cart-view-email" type="email">
+    <form name="cart">
+        <label>ФІБ</label>
+        <input name="name" id="cart-view-name" type="text">
+        <label>Телефон</label>
+        <input name="phone" id="cart-view-phone" type="number">
+        <label>E-mail</label>
+        <input name="email" id="cart-view-email" type="email">
     </form>
     <button id="cart-view-send" type="button">Надіслати замовлення</button>
-  </div>
+    </div>
 </main>
 <footer class="footer">
-  Додаток розробив Філоненко Михайло
+    Додаток розробив Філоненко Михайло
 </footer>
 <script src="js/main.js"></script>
 </body>

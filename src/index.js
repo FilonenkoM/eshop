@@ -3,7 +3,7 @@ import './scss/main.scss';
 const SERVER_NAME = "http://nit.tron.net.ua/";
 const CATEGORY_TEMPLATE = document.getElementById("category-template");
 const PRODUCT_TEMPLATE = document.getElementById("product-template")
-
+const TOKEN = "Y96gIp0vkAZpHhh1L3iI";
 var cartTable = document.getElementById("cart-view-table");
 var itemsInCart = [];
 var countOfItemsInCart = [];
@@ -80,11 +80,10 @@ function insertTemplatedContent(container, fill, array) {
 
 function post(server, method, params) {
     var xhr = createXHR();
-    xhr.open("POST", serve + method, true);
-
-    xhr.setRequestHeader('Content-Type', 'application/json');
-    xhr.setRequestHeader('Content-Type', 'application/json');
-
+    console.log(server + method);
+    console.log(params.getAll());
+    xhr.open("POST", server + method);
+    xhr.send(params);
 }
 
 function showProductView(product) {
@@ -120,19 +119,12 @@ function setupProductView() {
 
 function setupCartView() {
     document.getElementById("cart-view-send").onclick = function () {
-        var email = document.getElementById("cart-view-email").value;
-        var name = document.getElementById("cart-view-name").value;
-        var phone = document.getElementById("cart-view-phone").value;
-        var params = {
-            "name": name,
-            "phone": phone,
-            "email": email,
-        };
-        for(let i=0;i<itemsInCart;i++) {
-            var param = "products[" + itemsInCart[i] + "]";
-            params[param] = countOfItemsInCart[i];
+        var formData = new FormData(document.forms.cart);
+        formData.append("token", TOKEN);
+        for (let i = 0; i < itemsInCart.length; i++) {
+            formData.append("products[" + itemsInCart[i].id + "]", countOfItemsInCart[i]);
         }
-        post(SERVER_NAME, "api/order/add", params);
+        post(SERVER_NAME, "api/order/add", formData);
     }
 }
 
@@ -144,5 +136,19 @@ window.onload = function () {
     setupProductView();
     setupCartView();
 };
+
+// interface functions
+var menuHided = false;
+document.getElementById("categories-icon").onclick = function () {
+    var categories = document.getElementById("list-view");
+    if(menuHided) {
+        categories.style.height = "200px";
+        categories.style.fontSize = "14px";
+    } else {
+        categories.style.height = "0";
+        categories.style.fontSize = "0";
+    }
+    menuHided = !menuHided;
+}
 
 
