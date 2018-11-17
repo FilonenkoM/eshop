@@ -15,44 +15,52 @@
     </div>
     <h1 id="store-header">$tore</h1>
     <div id="list-view">
-        <ul id="categories" class="categories">
+        <div id="categories" class="categories">
             <template id="category-template">
-                <li>
-                    <a id="category-name-link" href="#">
-                        New category
-                    </a>
-                </li>
+                <label class="category-name-link" id="category-name-link">
+                    <input name="category" value="New Category" class="menu-radio" type="radio" checked>
+                    <span class="category-name">New category</span>
+                </label>
             </template>
-        </ul>
+        </div>
     </div>
 </header>
 <main>
     <ul id="products" class="products">
         <template id="product-template">
             <li id="product-container">
-                <img id="product-image">
-                <a id="product-name-link" href="#">
-                    New product
+                <a href="#" class="product-card">
+                    <div class="product-image">
+                        <img id="product-image">
+                    </div>
+                    <span id="product-name-link" href="#">
+                        New product
+                    </span>
+                    <div class="product-price-container">
+                        <p id="product-price" class="price"> Price
+                        </p>
+                        <p id="product-special-price" class="special-price">Special-price
+                        </p>
+                        <button id="add-to-cart" class="order-button" type="button">У кошик</button>
+                    </div>
                 </a>
-                <p id="product-price"> Price
-                </p>
-                <p id="product-special-price">Special-price
-                </p>
-                <button id="add-to-cart" type="button">У кошик</button>
             </li>
         </template>
     </ul>
     <div id="product-view">
         <a id="back-button" href="#">Back</a>
-        <p id="product-view-name">
-        </p>
-        <img id="product-view-image">
-        <p id="product-view-price">Price</p>
-        <p id="product-view-special-price">Speical price</p>
-        <p id="product-view-description">Description</p>
-        <button type="button" id="to-cart-button">
-            Add to cart
+        <h2 id="product-view-name">
+        </h2>
+        <div class="product-view-image-container">
+            <img id="product-view-image">
+        </div>
+        <p class="price" id="product-view-price">Price</p>
+        <p class="special-price" id="product-view-special-price">Speical price</p>
+
+        <button id="product-view-order" class="order-button" type="button" id="to-cart-button">
+            У кошик
         </button>
+        <p id="product-view-description">Description</p>
     </div>
     <div id="cart-view"
     <p class="cart-view-header">Кошик</p>

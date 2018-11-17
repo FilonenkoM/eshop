@@ -7,6 +7,7 @@ const TOKEN = "Y96gIp0vkAZpHhh1L3iI";
 var cartTable = document.getElementById("cart-view-table");
 var itemsInCart = [];
 var countOfItemsInCart = [];
+var categoriesCount = 0;
 
 function createXHR() {
     try {
@@ -35,14 +36,16 @@ function load(server, method, onLoad, onLoadArguments = []) {
 function fillProduct(product) {
     var view = PRODUCT_TEMPLATE.content.cloneNode(true);
     var link = view.getElementById("product-name-link");
-    link.onclick = function () {
+    view.getElementById("product-container").onclick = function () {
         showProductView(product);
     };
     link.innerHTML = product.name;
     view.getElementById("product-image").src = product.image_url;
     view.getElementById("product-price").innerHTML = product.price;
     view.getElementById("product-special-price").innerHTML = product.special_price;
-    view.getElementById("add-to-cart").onclick = function () {
+    view.getElementById("add-to-cart").onclick = function (e) {
+        e.stopPropagation();
+        showCartView();
         addRowToCartTable(cartTable, product);
     }
     return view;
@@ -61,20 +64,21 @@ function addRowToCartTable(table, product) {
 }
 
 function fillCategory(category) {
+    categoriesCount ++;
     var view = CATEGORY_TEMPLATE.content.cloneNode(true);
-    var link = view.getElementById("category-name-link");
-    link.onclick = function () {
+    var nameField = view.querySelector(".category-name");
+    nameField.onclick = function () {
         load(SERVER_NAME, "api/product/list/category/" + category.id, insertTemplatedContent,
-            [document.getElementById("products"), fillProduct]);
+            [document.getElementById("products"), fillProduct])
     };
-    link.innerHTML = category.name;
+    nameField.innerHTML = category.name;
     return view;
 }
 
 function insertTemplatedContent(container, fill, array) {
     container.innerHTML = "";
-    for (let i = 0; i < array.length; i++) {
-        container.appendChild(fill(array[i]));
+    for(let i=array.length-1;i>=0;i--) {
+        container.insertBefore(fill(array[i]), container.children[0]);
     }
 }
 
@@ -87,7 +91,7 @@ function post(server, method, params) {
 }
 
 function showProductView(product) {
-    document.getElementById("list-view").style.display = "none";
+    document.getElementById("products").style.display = "none";
     const view = document.getElementById("product-view");
     view.style.display = "block";
     document.getElementById("product-view-name").innerHTML = product.name;
@@ -95,7 +99,7 @@ function showProductView(product) {
     document.getElementById("product-view-price").innerText = product.price;
     document.getElementById("product-view-special-price").innerHTML = product.special_price;
     document.getElementById("product-view-description").innerHTML = product.description;
-    document.getElementById("to-cart-button").onclick = function () {
+    document.getElementById("product-view-order").onclick = function () {
         var cartTable = document.getElementById("cart-view-table")
         addRowToCartTable(cartTable, product);
         showCartView();
@@ -138,17 +142,14 @@ window.onload = function () {
 };
 
 // interface functions
-var menuHided = false;
+var menuHided = true;
 document.getElementById("categories-icon").onclick = function () {
     var categories = document.getElementById("list-view");
     if(menuHided) {
-        categories.style.height = "200px";
-        categories.style.fontSize = "14px";
+        categories.style.maxHeight = (document.getElementById("categories").childElementCount * 100) + "px";
     } else {
-        categories.style.height = "0";
-        categories.style.fontSize = "0";
+        categories.style.maxHeight = "0";
     }
     menuHided = !menuHided;
 }
-
 
