@@ -41,9 +41,18 @@ function fillProduct(product) {
     };
     link.innerHTML = product.name;
     view.getElementById("product-image").src = product.image_url;
-    view.getElementById("product-price").innerHTML = product.price;
-    view.getElementById("product-special-price").innerHTML = product.special_price;
-    view.getElementById("add-to-cart").onclick = function (e) {
+    let priceField = view.getElementById("product-price");
+    let specialPriceField = view.getElementById("product-special-price")
+    priceField.innerHTML = product.price;
+    if(product.special_price) {
+        priceField.style.textDecoration = "line-through";
+       specialPriceField.innerHTML = product.special_price;
+    }
+    else {
+        specialPriceField.style.display = "none";
+    }
+    let button = view.getElementById("add-to-cart");
+    button.onclick = function (e) {
         e.stopPropagation();
         showCartView();
         addRowToCartTable(cartTable, product);
@@ -57,9 +66,34 @@ function addRowToCartTable(table, product) {
         countOfItemsInCart.push(1);
         var row = cartTable.insertRow(cartTable.rows.length);
         row.insertCell(0).innerHTML = product.name;
-        row.insertCell(1).innerHTML = product.price;
-        row.insertCell(2).innerHTML = "1";
-        row.insertCell(3).innerHTML = "Видалити";
+        row.insertCell(1).innerHTML = (product.special_price || product.price);
+
+        let dec = row.insertCell(2);
+        dec.innerHTML = "-";
+        var count = row.insertCell(3);
+        var index = itemsInCart.length -1;
+        dec.onclick = function() {
+            if(countOfItemsInCart[index] > 1) {
+                count.innerHTML --;
+                countOfItemsInCart[index]--;
+            }
+        }
+        count.innerHTML = "1";
+        let inc = row.insertCell(4);
+        inc.innerHTML = "+";
+        inc.onclick = function() {
+            countOfItemsInCart[index] ++;
+            count.innerHTML ++;
+        }
+
+        let del = row.insertCell(5);
+        del.className = "delete-button";
+        del.onclick = function() {
+            let index = itemsInCart.indexOf(product.id);
+            table.deleteRow(index+1);
+            itemsInCart.splice(index,1);
+            countOfItemsInCart.splice(index,1)
+        }
     }
 }
 
@@ -68,6 +102,7 @@ function fillCategory(category) {
     var view = CATEGORY_TEMPLATE.content.cloneNode(true);
     var nameField = view.querySelector(".category-name");
     nameField.onclick = function () {
+        showListView();
         load(SERVER_NAME, "api/product/list/category/" + category.id, insertTemplatedContent,
             [document.getElementById("products"), fillProduct])
     };
@@ -83,9 +118,8 @@ function insertTemplatedContent(container, fill, array) {
 }
 
 function post(server, method, params) {
+    alert("hello");
     var xhr = createXHR();
-    console.log(server + method);
-    console.log(params.getAll());
     xhr.open("POST", server + method);
     xhr.send(params);
 }
@@ -96,8 +130,18 @@ function showProductView(product) {
     view.style.display = "block";
     document.getElementById("product-view-name").innerHTML = product.name;
     document.getElementById("product-view-image").src = product.image_url;
-    document.getElementById("product-view-price").innerText = product.price;
-    document.getElementById("product-view-special-price").innerHTML = product.special_price;
+    let priceField = document.getElementById("product-view-price");
+    let specialPriceField = document.getElementById("product-view-special-price");
+    priceField.innerText = product.price;
+    if(product.special_price) {
+        specialPriceField.style.display = "block";
+        specialPriceField.innerHTML = product.special_price;
+        priceField.style.textDecoration = "line-through";
+    }
+    else {
+        specialPriceField.style.display = "none";
+        priceField.style.textDecoration = "";
+    }
     document.getElementById("product-view-description").innerHTML = product.description;
     document.getElementById("product-view-order").onclick = function () {
         var cartTable = document.getElementById("cart-view-table")
@@ -107,14 +151,18 @@ function showProductView(product) {
 }
 
 function showCartView() {
+    document.getElementById("products").style.display = "none";
     document.getElementById("product-view").style.display = "none";
-    document.getElementById("list-view").style.display = "none";
     document.getElementById("cart-view").style.display = "block";
 }
 
 function showListView() {
-    document.getElementById("product-view").style.display = "none";
-    document.getElementById("list-view").style.display = "block";
+    const categories = document.getElementById("categories");
+    if(products.style.display === "none") {
+        document.getElementById("product-view").style.display = "none";
+        document.getElementById("products").style.display = "block";
+        document.getElementById("cart-view").style.display = "none";
+    }
 }
 
 function setupProductView() {
@@ -140,6 +188,13 @@ window.onload = function () {
     setupProductView();
     setupCartView();
 };
+function validateEmail(email) {
+    var re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+    return re.test(String(email).toLowerCase());
+}
+function validatePhoneNumber(number) {
+    return number >= 100000000 && number <= 999999999;
+}
 
 // interface functions
 var menuHided = true;
@@ -152,4 +207,5 @@ document.getElementById("categories-icon").onclick = function () {
     }
     menuHided = !menuHided;
 }
-
+document.getElementById("store-header").onclick = showListView;
+document.getElementById("cart-icon").onclick = showCartView;
