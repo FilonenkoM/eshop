@@ -21,7 +21,8 @@
                     <input name="category" value="New Category" class="menu-radio" type="radio" checked>
                     <span class="category-name">New category</span>
                 </label>
-            </template>`
+            </template>
+            `
         </div>
     </div>
 </header>
@@ -48,7 +49,7 @@
         </template>
     </ul>
     <div id="product-view">
-        <a id="back-button" href="#">Back</a>
+        <a id="back-button" href="#">Назад</a>
         <h2 id="product-view-name">
         </h2>
         <div class="product-view-image-container">
@@ -63,14 +64,15 @@
         <p id="product-view-description">Description</p>
     </div>
     <div id="cart-view">
+        <a id="cart-view-back" href="#">До списку товарів</a>
         <h2 class="cart-view-header">Кошик</h2>
         <table id="cart-view-table">
             <tr class="table-headers">
                 <th class="cart-view-table-name">Товар</th>
                 <th>Ціна (₴)</th>
-                <th>+</th>
-                <th>Кількість</th>
                 <th>-</th>
+                <th>Кількість</th>
+                <th>+</th>
                 <th>Видалити</th>
             </tr>
         </table>
@@ -81,7 +83,8 @@
             <h3 class="cart-view-header required">Телефон</h3>
             <input required class="text-input" name="phone" id="cart-view-phone" type="number" placeholder="0991234567">
             <h3 class="cart-view-header required">Електронна пошта</h3>
-            <input required class="text-input" name="email" id="cart-view-email" type="email" placeholder="support@purplestore.com">
+            <input required class="text-input" name="email" id="cart-view-email" type="email"
+                   placeholder="support@purplestore.com">
         </form>
         <button id="cart-view-send" type="button">Надіслати замовлення</button>
     </div>
@@ -90,5 +93,12 @@
     Додаток розробив Філоненко Михайло
 </footer>
 <script src="js/main.js"></script>
+<div class="modal">
+    <div class="modal-content">
+        <h1 class="modal-header">All is correct</h1>
+        <p class="modal-text">All is correct</p>
+    </div>
+</div>
+</div>
 </body>
 </html>

@@ -44,9 +44,9 @@ function fillProduct(product) {
     let priceField = view.getElementById("product-price");
     let specialPriceField = view.getElementById("product-special-price")
     priceField.innerHTML = product.price;
-    if(product.special_price) {
+    if (product.special_price) {
         priceField.style.textDecoration = "line-through";
-       specialPriceField.innerHTML = product.special_price;
+        specialPriceField.innerHTML = product.special_price;
     }
     else {
         specialPriceField.style.display = "none";
@@ -71,34 +71,34 @@ function addRowToCartTable(table, product) {
         let dec = row.insertCell(2);
         dec.innerHTML = "-";
         var count = row.insertCell(3);
-        var index = itemsInCart.length -1;
-        dec.onclick = function() {
-            if(countOfItemsInCart[index] > 1) {
-                count.innerHTML --;
+        var index = itemsInCart.length - 1;
+        dec.onclick = function () {
+            if (countOfItemsInCart[index] > 1) {
+                count.innerHTML--;
                 countOfItemsInCart[index]--;
             }
         }
         count.innerHTML = "1";
         let inc = row.insertCell(4);
         inc.innerHTML = "+";
-        inc.onclick = function() {
-            countOfItemsInCart[index] ++;
-            count.innerHTML ++;
+        inc.onclick = function () {
+            countOfItemsInCart[index]++;
+            count.innerHTML++;
         }
 
         let del = row.insertCell(5);
         del.className = "delete-button";
-        del.onclick = function() {
+        del.onclick = function () {
             let index = itemsInCart.indexOf(product.id);
-            table.deleteRow(index+1);
-            itemsInCart.splice(index,1);
-            countOfItemsInCart.splice(index,1)
+            table.deleteRow(index + 1);
+            itemsInCart.splice(index, 1);
+            countOfItemsInCart.splice(index, 1)
         }
     }
 }
 
 function fillCategory(category) {
-    categoriesCount ++;
+    categoriesCount++;
     var view = CATEGORY_TEMPLATE.content.cloneNode(true);
     var nameField = view.querySelector(".category-name");
     nameField.onclick = function () {
@@ -112,15 +112,23 @@ function fillCategory(category) {
 
 function insertTemplatedContent(container, fill, array) {
     container.innerHTML = "";
-    for(let i=array.length-1;i>=0;i--) {
+    for (let i = array.length - 1; i >= 0; i--) {
         container.insertBefore(fill(array[i]), container.children[0]);
     }
 }
 
 function post(server, method, params) {
-    alert("hello");
     var xhr = createXHR();
-    xhr.open("POST", server + method);
+
+    xhr.onreadystatechange = function () {
+        if (xhr.readyState === 4) {
+            if(xhr.status == 200) {
+            } else {
+                showModal("Помилка!", "Непередбачена помилка", false);
+            }
+        }
+    }
+    xhr.open("POST", server + method, true);
     xhr.send(params);
 }
 
@@ -133,7 +141,7 @@ function showProductView(product) {
     let priceField = document.getElementById("product-view-price");
     let specialPriceField = document.getElementById("product-view-special-price");
     priceField.innerText = product.price;
-    if(product.special_price) {
+    if (product.special_price) {
         specialPriceField.style.display = "block";
         specialPriceField.innerHTML = product.special_price;
         priceField.style.textDecoration = "line-through";
@@ -158,7 +166,7 @@ function showCartView() {
 
 function showListView() {
     const categories = document.getElementById("categories");
-    if(products.style.display === "none") {
+    if (products.style.display === "none") {
         document.getElementById("product-view").style.display = "none";
         document.getElementById("products").style.display = "block";
         document.getElementById("cart-view").style.display = "none";
@@ -172,11 +180,46 @@ function setupProductView() {
 function setupCartView() {
     document.getElementById("cart-view-send").onclick = function () {
         var formData = new FormData(document.forms.cart);
-        formData.append("token", TOKEN);
-        for (let i = 0; i < itemsInCart.length; i++) {
-            formData.append("products[" + itemsInCart[i].id + "]", countOfItemsInCart[i]);
+        let nameIsCorrect = true;
+        let phoneIsCorrect = true;
+        let emailIsCorrect = true;
+        var productListIsCorrect = true;
+        if(formData.get("name").length < 1) {
+            nameIsCorrect = false;
         }
-        post(SERVER_NAME, "api/order/add", formData);
+        if(!emailCorrect(formData.get("email"))) {
+            emailIsCorrect = false;
+        }
+        if(!phoneCorrect(formData.get("phone"))) {
+            phoneIsCorrect = false;
+        }
+        if(itemsInCart.length < 1) {
+            productListIsCorrect = false;
+        }
+        if(!(nameIsCorrect && emailIsCorrect && phoneIsCorrect && productListIsCorrect)) {
+            let warning = "";
+            if(!nameIsCorrect) {
+                warning += "Некоректне ім'я <br>";
+            }
+            if(!emailIsCorrect) {
+                warning += "Некоректна пошта <br>"
+            }
+            if(!phoneIsCorrect) {
+                warning += "Некоректний номер телефону <br>";
+            }
+            if(!productListIsCorrect) {
+                warning += "Ви не обрали жодного товару <br>";
+            }
+            showModal("Замовлення не відправлено", warning, false);
+        }
+        else {
+            showModal("Замовлення надислано", "Ваше замовлення успішно збережене та надіслане", true)
+            formData.append("token", TOKEN);
+            for (let i = 0; i < itemsInCart.length; i++) {
+                formData.append("products[" + itemsInCart[i].id + "]", countOfItemsInCart[i]);
+            }
+            post(SERVER_NAME, "api/order/add", formData);
+        }
     }
 }
 
@@ -188,11 +231,27 @@ window.onload = function () {
     setupProductView();
     setupCartView();
 };
-function validateEmail(email) {
+
+function showModal(header, text, successful) {
+    let modal = document.querySelector(".modal");
+    modal.style.display = "block";
+    if(successful) {
+        modal.querySelector(".modal-content").style.borderColor = "green";
+        modal.querySelector(".modal-content").style.backgroundColor = "#deefd9";
+    } else {
+        modal.querySelector(".modal-content").style.borderColor = "red";
+        modal.querySelector(".modal-content").style.backgroundColor = "#f1dede";
+    }
+    modal.querySelector(".modal-header").innerHTML = header;
+    modal.querySelector(".modal-text").innerHTML = text;
+}
+
+function emailCorrect(email) {
     var re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
     return re.test(String(email).toLowerCase());
 }
-function validatePhoneNumber(number) {
+
+function phoneCorrect(number) {
     return number >= 100000000 && number <= 999999999;
 }
 
@@ -200,7 +259,7 @@ function validatePhoneNumber(number) {
 var menuHided = true;
 document.getElementById("categories-icon").onclick = function () {
     var categories = document.getElementById("list-view");
-    if(menuHided) {
+    if (menuHided) {
         categories.style.maxHeight = (document.getElementById("categories").childElementCount * 100) + "px";
     } else {
         categories.style.maxHeight = "0";
@@ -209,3 +268,10 @@ document.getElementById("categories-icon").onclick = function () {
 }
 document.getElementById("store-header").onclick = showListView;
 document.getElementById("cart-icon").onclick = showCartView;
+
+window.onclick = function(event) {
+    if (event.target === document.querySelector(".modal")) {
+        document.querySelector(".modal").style.display = "none";
+    }
+}
+document.getElementById("cart-view-back").onclick = showListView;
