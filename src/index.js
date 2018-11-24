@@ -237,6 +237,12 @@ function setupCartView() {
                 formData.append("products[" + itemsInCart[i].id + "]", countOfItemsInCart[i]);
             }
             post(SERVER_NAME, "api/order/add", formData);
+            for(let i=0;i<CART_VIEW_TABLE.rows.length-1;i++)
+                CART_VIEW_TABLE.deleteRow(1);
+            itemsInCart = [];
+            countOfItemsInCart = [];
+            localStorage.clear();
+            showListView();
         }
     }
 }
