@@ -34,6 +34,9 @@ function load(server, method, onLoad, onLoadArguments = []) {
 }
 
 function fillProduct(product) {
+    if(localStorage.getItem(product.id)) {
+        addRowToCartTable(document.getElementById("cart-view-table"), product);
+    }
     var view = PRODUCT_TEMPLATE.content.cloneNode(true);
     var link = view.getElementById("product-name-link");
     view.getElementById("product-container").onclick = function () {
@@ -62,8 +65,12 @@ function fillProduct(product) {
 
 function addRowToCartTable(table, product) {
     if (!itemsInCart.includes(product.id)) {
+        if(!localStorage.getItem(product.id)) {
+            localStorage.setItem(product.id, "1");
+
+        }
         itemsInCart.push(product.id);
-        countOfItemsInCart.push(1);
+        countOfItemsInCart.push(localStorage.getItem(product.id) || 1);
         var row = cartTable.insertRow(cartTable.rows.length);
         row.insertCell(0).innerHTML = product.name;
         row.insertCell(1).innerHTML = (product.special_price || product.price);
@@ -76,19 +83,22 @@ function addRowToCartTable(table, product) {
             if (countOfItemsInCart[index] > 1) {
                 count.innerHTML--;
                 countOfItemsInCart[index]--;
+                localStorage.setItem(product.id, countOfItemsInCart[index]);
             }
         }
-        count.innerHTML = "1";
+        count.innerHTML = localStorage.getItem(product.id);
         let inc = row.insertCell(4);
         inc.innerHTML = "+";
         inc.onclick = function () {
             countOfItemsInCart[index]++;
             count.innerHTML++;
+            localStorage.setItem(product.id, countOfItemsInCart[index])
         }
 
         let del = row.insertCell(5);
         del.className = "delete-button";
         del.onclick = function () {
+            localStorage.removeItem(product.id);
             let index = itemsInCart.indexOf(product.id);
             table.deleteRow(index + 1);
             itemsInCart.splice(index, 1);
@@ -122,7 +132,7 @@ function post(server, method, params) {
 
     xhr.onreadystatechange = function () {
         if (xhr.readyState === 4) {
-            if(xhr.status == 200) {
+            if (xhr.status == 200) {
             } else {
                 showModal("Помилка!", "Непередбачена помилка", false);
             }
@@ -184,30 +194,30 @@ function setupCartView() {
         let phoneIsCorrect = true;
         let emailIsCorrect = true;
         var productListIsCorrect = true;
-        if(formData.get("name").length < 1) {
+        if (formData.get("name").length < 1) {
             nameIsCorrect = false;
         }
-        if(!emailCorrect(formData.get("email"))) {
+        if (!emailCorrect(formData.get("email"))) {
             emailIsCorrect = false;
         }
-        if(!phoneCorrect(formData.get("phone"))) {
+        if (!phoneCorrect(formData.get("phone"))) {
             phoneIsCorrect = false;
         }
-        if(itemsInCart.length < 1) {
+        if (itemsInCart.length < 1) {
             productListIsCorrect = false;
         }
-        if(!(nameIsCorrect && emailIsCorrect && phoneIsCorrect && productListIsCorrect)) {
+        if (!(nameIsCorrect && emailIsCorrect && phoneIsCorrect && productListIsCorrect)) {
             let warning = "";
-            if(!nameIsCorrect) {
+            if (!nameIsCorrect) {
                 warning += "Некоректне ім'я <br>";
             }
-            if(!emailIsCorrect) {
+            if (!emailIsCorrect) {
                 warning += "Некоректна пошта <br>"
             }
-            if(!phoneIsCorrect) {
+            if (!phoneIsCorrect) {
                 warning += "Некоректний номер телефону <br>";
             }
-            if(!productListIsCorrect) {
+            if (!productListIsCorrect) {
                 warning += "Ви не обрали жодного товару <br>";
             }
             showModal("Замовлення не відправлено", warning, false);
@@ -235,7 +245,7 @@ window.onload = function () {
 function showModal(header, text, successful) {
     let modal = document.querySelector(".modal");
     modal.style.display = "block";
-    if(successful) {
+    if (successful) {
         modal.querySelector(".modal-content").style.borderColor = "green";
         modal.querySelector(".modal-content").style.backgroundColor = "#deefd9";
     } else {
@@ -269,7 +279,7 @@ document.getElementById("categories-icon").onclick = function () {
 document.getElementById("store-header").onclick = showListView;
 document.getElementById("cart-icon").onclick = showCartView;
 
-window.onclick = function(event) {
+window.onclick = function (event) {
     if (event.target === document.querySelector(".modal")) {
         document.querySelector(".modal").style.display = "none";
     }
