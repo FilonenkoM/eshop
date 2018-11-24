@@ -1,6 +1,6 @@
 import './scss/main.scss';
 
-const SERVER_NAME = "http://nit.tron.net.ua/";
+const SERVER_NAME = "https://nit.tron.net.ua/";
 const CATEGORY_TEMPLATE = document.getElementById("category-template");
 const PRODUCT_TEMPLATE = document.getElementById("product-template")
 const TOKEN = "Y96gIp0vkAZpHhh1L3iI";

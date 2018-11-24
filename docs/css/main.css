@@ -338,6 +338,5 @@ product view module
 
 #cart-view-back, #back-button {
   font-family: var(--default-font-family);
-  color: black;
-  text-decoration: none; }
+  color: black; }
 
