@@ -72,6 +72,7 @@ function fillCategory(category) {
             [document.getElementById("products"), fillProduct])
     };
     nameField.innerHTML = category.name;
+    nameField.setAttribute("title", category.description);
     return view;
 }
 
