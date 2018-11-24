@@ -255,7 +255,27 @@ window.onload = function () {
         [document.getElementById("products"), fillProduct]);
     setupProductView();
     setupCartView();
+    setupCartInputs();
 };
+function setupCartInputs() {
+    let nameField = document.getElementById("cart-view-name");
+    nameField.value = localStorage.getItem("name");
+    nameField.oninput = function() {
+        localStorage.setItem("name", nameField.value);
+    }
+    
+    let emailField = document.getElementById("cart-view-email");
+    emailField.value = localStorage.getItem("email");
+    emailField.oninput = function() {
+        localStorage.setItem("email", emailField.value);
+    }
+
+    let phoneField = document.getElementById("cart-view-phone");
+    phoneField.value = localStorage.getItem("phone");
+    phoneField.oninput = function() {
+        localStorage.setItem("phone", phoneField.value);
+    }
+}
 
 function showModal(header, text, successful) {
     const modal = document.querySelector(".modal");
