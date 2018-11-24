@@ -263,7 +263,7 @@ function setupCartInputs() {
     nameField.oninput = function() {
         localStorage.setItem("name", nameField.value);
     }
-    
+
     let emailField = document.getElementById("cart-view-email");
     emailField.value = localStorage.getItem("email");
     emailField.oninput = function() {
