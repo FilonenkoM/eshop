@@ -311,3 +311,12 @@ window.onclick = function (event) {
     }
 }
 document.getElementById("cart-view-back").onclick = showListView;
+document.getElementById("all-products").onclick = function() {
+    showListView();
+    load(SERVER_NAME, "api/product/list", insertTemplatedContent,
+        [document.getElementById("products"), fillProduct]);
+    let menuRadio = document.getElementsByClassName("menu-radio");
+    for(let i=0;i<menuRadio.length;i++) {
+        menuRadio[i].checked = false;
+    }
+}

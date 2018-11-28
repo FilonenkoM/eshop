@@ -18,7 +18,7 @@
         <div id="categories" class="categories">
             <template id="category-template">
                 <label class="category-name-link" id="category-name-link">
-                    <input name="category" value="New Category" class="menu-radio" type="radio" checked>
+                    <input name="category" value="New Category" class="menu-radio" type="radio">
                     <span class="category-name">New category</span>
                 </label>
             </template>
@@ -26,6 +26,9 @@
     </div>
 </header>
 <main>
+    <h2>
+        <button id="all-products" class="order-button" type="button">Всі товари</button>
+    </h2>
     <ul id="products" class="products">
         <template id="product-template">
             <li class="product-container">
