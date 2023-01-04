@@ -13,7 +13,7 @@
   "author": "Michael Filonenko",
   "license": "ISC",
   "devDependencies": {
-    "@babel/core": "^7.1.5",
+    "@babel/core": "^7.20.12",
     "@babel/preset-env": "^7.1.5",
     "babel-loader": "^8.0.4",
     "css-loader": "^1.0.1",
